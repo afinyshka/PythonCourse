@@ -11,8 +11,8 @@ def find_in_text_times (text_1:  str, text_2: str):
         # print(text_1[i:i + len(text_2)])
     return count
 
-text_1 = 'мамы мымыли Милу мыломы'
-text_2 = 'мы'
+text_1 = 'aaabbabbaacaaaybbcbbcbb'
+text_2 = 'aa'
 
 print(f'Text "{text_2}" appears {find_in_text_times(text_1, text_2)}-time(s)')
 
@@ -56,10 +56,10 @@ print(f'Text "{text_2}" appears {find_in_text_times(text_1, text_2)}-time(s)')
 
 # встроенная функция
 
-str_1 = 'Hello, world!ll'
-str_2 = 'll'
+str_1 = 'aaabbabbaacaaaybbcbbcbb'
+str_2 = 'aa'
 print(str_1.count(str_2))
 
-str_1 = 'Heeeello, world!ll'
-str_2 = 'll'
+str_1 = 'aaabbabbaacaaaybbcbbcbb'
+str_2 = 'aa'
 print(str_1.find(str_2))

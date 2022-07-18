@@ -3,9 +3,6 @@
 from math import lcm
 
 
-number_1 = 27
-number_2 = 45
-
 def list_int_deviders (number: int) -> list:
     list_dev = []
     for i in range(2,number+1):
@@ -33,6 +30,9 @@ def product_of_lists(listt_1: list, listt_2: list) -> list:
         product *= i
     return product
 
+
+number_1 = 27
+number_2 = 45
 
 list_div_1 = list_int_deviders(number_1)
 print('list_1 = ',list_div_1)

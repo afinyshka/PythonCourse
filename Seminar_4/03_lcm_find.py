@@ -3,7 +3,7 @@
 from math import lcm
 
 
-def list_int_deviders (number: int) -> list:
+def list_iof_simple_multipliers (number: int) -> list:
     list_dev = []
     for i in range(2,number+1):
         if(number%i == 0):
@@ -34,10 +34,10 @@ def product_of_lists(listt_1: list, listt_2: list) -> list:
 number_1 = 27
 number_2 = 45
 
-list_div_1 = list_int_deviders(number_1)
+list_div_1 = list_iof_simple_multipliers(number_1)
 print('list_1 = ',list_div_1)
 
-list_div_2 = list_int_deviders(number_2)
+list_div_2 = list_iof_simple_multipliers(number_2)
 print('list_2 = ',list_div_2)
 
 list_div_2 = list_del_the_same(list_div_1, list_div_2)

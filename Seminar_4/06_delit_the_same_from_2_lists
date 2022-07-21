@@ -1,0 +1,20 @@
+# Задайте последовательность чисел. Напишите программу, которая выведет список уникальных элементов исходной последовательности.
+
+def list_del_the_same(listt: list) -> list: # удаляет задвоенные элементы
+    list_original = []
+    [list_original.append(i) for i in listt if i not in list_original]
+    print(listt, ' -> ', list_original)
+    return(list_original)
+
+def remove_doubles (list_1: list, list_2:list) -> list:
+    for i in list_1:
+        for j in list_2:
+            if ( i == j):
+                list_2.remove(j)
+    return list_2
+
+list_1 = [7, 1, 4, 4, 5, 1, 6, 4, 7]
+list_original = list_del_the_same(list_1)
+
+print('list_start = ',list_1)
+print('list_original = ',list_original)

@@ -33,6 +33,17 @@ def game_X_O (rows: int = 3, columns: int = 3):
     count = 0 # Number of players moves
     turn = True # X turn
     matrix_print(list_x_o)
+    whos_turn = int(input('''Enter the number for players turns:
+1 - player "X", player "O"
+2 - player "O", player "O"
+:'''))
+    while not 1 <= whos_turn <= 2:
+        whos_turn = int(input('''Warning! Enter the number for players turns:
+1 - player "X", player "O"
+2 - player "O", player "O"
+:'''))
+    if whos_turn == 2:
+        turn = False
     while count < (rows * columns):
         if turn:
             move = input("Enter the name of the sell in format 'row' 'column', meanings from 1 to 3 for X: ")
@@ -53,7 +64,6 @@ def game_X_O (rows: int = 3, columns: int = 3):
         move_storage.append(move)
         matrix_print(list_x_o)
         count += 1
-        print(count)
         # here is win combination check:
         if (rows + columns - 2) < count < (rows * columns):
             if winning_positions(list_x_o) == 'X':

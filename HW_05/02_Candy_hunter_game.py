@@ -105,7 +105,7 @@ And, {player_1}, you will be player number 2! So let's go! """)
         number -= take_candy
     if whos_turn:
         print(f'''\nOh noo... {player_2} is the winner! He took {player_2_candies} candies!
-And according to yhe rules, {player_1}  will give you his(her) {player_1_candies} candies.\n''')
+And according to the rules, {player_1}, you will give him your {player_1_candies} candies.\n''')
     else:
         print(f'''\nCongratulations! {player_1}, you are the winner! You took {player_1_candies} candies!
 And according to the rules, {player_2}  will give you his(her) {player_2_candies} candies.\n''')
@@ -145,7 +145,7 @@ And, {player_1}, you will be player number 2! So let's go! """)
             player_1_candies += take_candy
             whos_turn = False
         else:
-            if (number - number//(number_taken_candies + 1) * (number_taken_candies + 1) == 0):
+            if (number - number//(number_taken_candies + 1) * (number_taken_candies + 1) == 0) or number > number_taken_candies * 2 + 1:
                 take_candy = random.randint(1, candy_remains)
             else:
                 take_candy = number - number//(number_taken_candies + 1) * (number_taken_candies + 1)
@@ -156,7 +156,7 @@ And, {player_1}, you will be player number 2! So let's go! """)
         number -= take_candy
     if whos_turn:
         print(f'''\nOh noo... {player_2} is the winner! He took {player_2_candies} candies!
-And according to yhe rules, {player_1}  will give you his(her) {player_1_candies} candies.\n''')
+And according to the rules, {player_1}, you will give him your {player_1_candies} candies.\n''')
     else:
         print(f'''\nCongratulations! {player_1}, you are the winner! You took {player_1_candies} candies!
 And according to the rules, {player_2}  will give you his(her) {player_2_candies} candies.\n''')

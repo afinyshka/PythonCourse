@@ -24,6 +24,7 @@ def winning_positions (matrix: list):
         return 'X'
     elif (a == b == c == 'O' or d == e == f == 'O' or g == h == i == 'O' or a == d == g  == 'O' or b == e == h == 'O' or c == f == i == 'O'  or a == e == i == 'O' or c == e == g == 'O'):
         return 'O'
+    else: return "draw"
 
 
 def game_X_O (rows: int = 3, columns: int = 3):
@@ -52,6 +53,7 @@ def game_X_O (rows: int = 3, columns: int = 3):
         move_storage.append(move)
         matrix_print(list_x_o)
         count += 1
+        print(count)
         # here is win combination check:
         if (rows + columns - 2) < count < (rows * columns):
             if winning_positions(list_x_o) == 'X':
@@ -61,7 +63,12 @@ def game_X_O (rows: int = 3, columns: int = 3):
                 print('   Hooray!!! O-s win!')
                 break
         elif count == rows * columns:
-            print ('You ended the game in a draw!')
+            if winning_positions(list_x_o) == 'X':
+                print('   Hooray!!! X-s win!')
+            elif winning_positions(list_x_o) == 'O':
+                print('   Hooray!!! O-s win!')
+            else:
+                print ('You ended the game in a draw!')
     print('The end!')
     return 
 

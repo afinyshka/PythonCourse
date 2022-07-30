@@ -11,7 +11,7 @@ def phonebook_create() -> None:
     elif command == '2':
         logic.find_contact()
     elif command == '3':
-        logic.delite_contact()
+        logic.delete_contact()
     elif command == '4':
         logic.change_contact
 

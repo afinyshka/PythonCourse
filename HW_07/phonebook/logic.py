@@ -15,12 +15,14 @@ def add_contact ():
     comment = input('Enter a comment: ')
     abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
     with open (path, "r") as file:
-        if abonents == "None":
+        # abonents: list = json.load(file)
+        if os.stat(path).st_size == 0:
             abonents = []
-        abonents: list = json.load(file)
+        else: abonents: list = json.load(file)
     with open(path, "w") as file:
         abonents.append(abonent)
-        json.dump(abonents, file, delimeter=3)
+        json.dump(abonents, file)
+    view.success_update()
 
 def find_contact():
     with open(path, 'r') as file:

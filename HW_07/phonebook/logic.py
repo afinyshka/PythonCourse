@@ -3,10 +3,13 @@ import json
 from importlib.resources import path
 import os
 import view
+import csv
 
 
 FILE_NAME = 'contacts_book.json'
+FILE_NAME_2 = 'contacts_book.csv'
 path = 'HW_07' + os.sep + 'phonebook' + os.sep + f'{FILE_NAME}'
+path_2 = 'HW_07' + os.sep + 'phonebook' + os.sep + f'{FILE_NAME_2}'
 
 def add_contact ():
     first_name = input('Enter the first name: ')
@@ -15,23 +18,21 @@ def add_contact ():
     comment = input('Enter a comment: ')
     abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
     with open (path, "r") as file:
-        # abonents: list = json.load(file)
         if os.stat(path).st_size == 0:
             abonents = []
         else: abonents: list = json.load(file)
     with open(path, "w") as file:
         abonents.append(abonent)
         json.dump(abonents, file)
-    view.success_update()
+    view.success_saved()
 
 def find_contact():
     with open(path, 'r') as file:
         abonents: list[dict] = json.load(file)
         dict_count = 0
-        # while dict_count < 1: TODO add while search
         find_ab = input('Enter the name of the abonent to find: ')
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower():
+            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
                 view.print_dict(dicts)
                 dict_count += 1
         if dict_count == 0:
@@ -43,7 +44,7 @@ def delite_contact():
         dict_count = 0
         find_ab = input('Enter the name of the abonent to delite: ')
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower():
+            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
                 dict_count += 1
                 print(f'Are you sure you want to remove contact: {dicts["first_name"]} {dicts["last_name"]}?')
                 del_confirmation = input('for yes - press 1\nfor no - press 2:\n')
@@ -61,7 +62,7 @@ def change_contact():
         dict_count = 0
         find_ab = input("Enter the name of the abonent to change it's data: ")
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower():
+            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
                 dict_count += 1
                 print(f'Are you sure you want to change data for contact: {dicts["first_name"]} {dicts["last_name"]}?')
                 change_confirmation = input('for yes - press 1\nfor no - press 2:\n')
@@ -85,19 +86,28 @@ def change_contact():
                     view.success_update()    
         if dict_count == 0:
             print('There\'s no contact with this name. Try again')
-                        
-                        
 
-
-
-
-
-
-# d = [{"first_name": "Maria", "last_name": "Aksenova", "phone_number": "89078909887", "comment": "no"}, {"first_name": "Anya", "last_name": "Rihter", "phone_number": "89055567788", "comment": "friend"}]
-# # find_ab = 'Mar'
-# for dicts in d:
-# #     if find_ab in dicts['first_name'] + ' ' + dicts['last_name']: # TODO add lower search
-# #         print('pop')
-# #         d.remove(dicts)
-
-#     print(dicts["first_name"], dicts['last_name'])
+def export_contacts_to_csv():
+    with open (path, 'r') as file:
+        data_json: list[dict] = json.load(file)
+    with open (path_2, 'w') as file:
+        writer: list[dict] = csv.writer(file)
+        writer.writerow(
+            [
+                'first_name',
+                'last_name',
+                'phone_number',
+                'comment'
+            ]
+        )
+        writer = csv.writer(file)
+        for dicts in data_json:
+            writer.writerow(
+                [
+                    dicts["first_name"],
+                    dicts["last_name"],
+                    dicts["phone_number"],
+                    dicts["comment"]
+                ]
+            )
+    view.success_saved()

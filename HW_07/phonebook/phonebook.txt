@@ -1,3 +1,0 @@
-
-{'first_name': 'Maria', 'last_name': 'Aksenova', 'phone_number': '89261232323', 'comment': 'no'}
-{'first_name': 'Nina', 'last_name': 'Hirina', 'phone_number': '89234567890', 'comment': 'collegue'}

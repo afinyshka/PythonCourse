@@ -9,7 +9,7 @@ def print_dict(name_dict: str) -> None:
         print(f'    {i}: {name_dict[i]}')
 
 def success_update():
-    print('Tha data has been successfully updated!')
+    print('The data has been successfully updated!')
 
 def success_saved():
-    print('Tha data has been successfully saved!')
+    print('The data has been successfully saved!')

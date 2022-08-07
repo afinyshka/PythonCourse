@@ -2,9 +2,14 @@ import tkinter as tk
 import logic
 import view
 
-def get_entry(entry_text):
-    value = entry_text.get()
-    return value
+def get_entry(val_1, val_2, val_3, val_4):
+    first_name = val_1.get()
+    last_name = val_2.get()
+    phone_num = val_3.get()
+    comment = val_4.get()
+    abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
+    logic.add_contact(abonent)
+    return abonent
 
 def find_entry():
     value = input_line.get()
@@ -27,20 +32,7 @@ def add_entry():
     inp_line_3.grid(row=3, column=1, stick="wesn")
     inp_line_4 = tk.Entry(win)
     inp_line_4.grid(row=4, column=1, stick="wesn")
-    save = tk.Button(win, text="Save", command=add_to_phonebook).grid(row=5, column=1, stick="we")
-    return [inp_line_1, inp_line_2, inp_line_3, inp_line_4]
-    
-
-def add_to_phonebook():
-    first_name = add_entry()[0].get()
-    last_name = add_entry()[1].get()
-    phone_num = add_entry()[2].get()
-    comment = add_entry()[3].get()
-    abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
-    view.print_dict(abonent)
-    logic.add_contact(abonent)
-
-
+    save = tk.Button(win, text="Save", command=lambda: get_entry(inp_line_1, inp_line_2, inp_line_3, inp_line_4)).grid(row=5, column=1, stick="we")
 
 
 if __name__ == '__main__':

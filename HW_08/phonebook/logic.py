@@ -22,6 +22,7 @@ def add_contact (abonent):
     with open(path_1, "w") as file:
         abonents.append(abonent)
         json.dump(abonents, file)
+    view.print_dict(abonent)
     view.success_saved()
 
 def find_contact(value):

@@ -30,7 +30,7 @@ def find_contact(value):
         abonents: list[dict] = json.load(file)
         dict_count = 0
         text_contacts = ''
-        print('find_ab = ', value)
+        # print('find_ab = ', value)
         for dicts in abonents:
             if value.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
                 text_contacts += view.print_dict1(dicts)
@@ -41,23 +41,35 @@ def find_contact(value):
     else:
         return text_contacts
 
-def delite_contact():
+# def open_data():
+#     with open(path_1, 'r') as file:
+#         abonents: list[dict] = json.load(file)
+#         return abonents
+
+# def contact_search (value):
+#     abonents = open_data()
+#     dict_count = 0
+#     for dicts in abonents:
+#         if value.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
+#             dict_count += 1
+#             text_contacts = f'{dicts["first_name"]} {dicts["last_name"]}'
+#         if dict_count == 0:
+#             return ('There\'s no contact with this name. Try again')
+#         else:
+#             return text_contacts
+
+def delete_contact(value_1, value_2):
     with open(path_1, 'r') as file:
         abonents: list[dict] = json.load(file)
-        dict_count = 0
-        find_ab = input('Enter the name of the abonent to delite: ')
+        print(value_1, value_2)
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
-                dict_count += 1
-                print(f'Are you sure you want to remove contact: {dicts["first_name"]} {dicts["last_name"]}?')
-                del_confirmation = input('for yes - press 1\nfor no - press 2:\n')
-                if del_confirmation == '1':
-                    abonents.remove(dicts)
-                    with open(path_1, "w") as file:
-                        json.dump(abonents, file) # TODO why id delite item 1 quite?
-                    view.success_update()
-        if dict_count == 0:
-            print('There\'s no contact with this name. Try again')
+            if value_1.lower() == dicts['first_name'].lower() and value_2.lower() == dicts['last_name'].lower():
+                print(dicts)
+                abonents.remove(dicts)
+                with open(path_1, "w") as file:
+                    json.dump(abonents, file) # TODO why id delite item 1 quite?
+                view.success_update()
+
 
 def change_contact():
     with open(path_1, 'r') as file:

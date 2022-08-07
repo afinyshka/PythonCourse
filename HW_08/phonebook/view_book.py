@@ -18,6 +18,7 @@ def find_entry():
     output_line_2 = tk.Label(win, text=output_text, bg="Gray", justify=tk.LEFT, padx=2, pady=2)
     output_line_1.grid(row=1, column=0, columnspan=2, stick="wesn")
     output_line_2.grid(row=2, column=0, columnspan=2, rowspan=5, stick="wesn", padx=2, pady=2)
+    return output_text
 
 def add_entry():
     tk.Label(win, text='Enter first name:', justify=tk.RIGHT).grid(row=1, column=0, stick="wesn",)
@@ -35,6 +36,21 @@ def add_entry():
     save = tk.Button(win, text="Save", command=lambda: get_entry(inp_line_1, inp_line_2, inp_line_3, inp_line_4)).grid(row=5, column=1, stick="we")
 
 
+
+def delete_entry():
+    output_text = find_entry()
+    check_text = output_text.split()
+    print(check_text)
+    if output_text != "":
+        tk.Button(win, text = "Yes", command=lambda: logic.delete_contact(check_text[1], check_text[3])).grid(row=7, column=0, stick="we")
+        tk.Button(win, text = "No", command=clear_input_line).grid(row=7, column=1, stick="we")
+    
+def clear_input_line():
+    input_line.delete(0, tk.END)
+
+
+
+
 if __name__ == '__main__':
     win = tk.Tk()
     # photo = tk.PhotoImage(file = 'name')
@@ -49,7 +65,7 @@ if __name__ == '__main__':
 
     find = tk.Button(win, text="Find", command=find_entry).grid(row=0, column=2, stick="we")
     add = tk.Button(win, text="Add", command=add_entry).grid(row=1, column=2, stick="we")
-    delete = tk.Button(win, text="Delete").grid(row=2, column=2, stick="we")
+    delete = tk.Button(win, text="Delete", command=delete_entry).grid(row=2, column=2, stick="we")
     change = tk.Button(win, text="Change").grid(row=3, column=2, stick="we")
     export = tk.Button(win, text="Export", command=logic.export_contacts_to_csv).grid(row=4, column=2, stick="we")
     # insert = tk.Button(win, text="Insert", command=insert_entry).grid(row=5, column=2, stick="we")

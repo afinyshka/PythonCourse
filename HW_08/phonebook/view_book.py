@@ -19,20 +19,25 @@ def add_entry():
     tk.Label(win, text='Enter last name:').grid(row=2, column=0, stick="wesn")
     tk.Label(win, text='Enter phone number:').grid(row=3, column=0, stick="wesn")
     tk.Label(win, text='Enter comment:').grid(row=4, column=0, stick="wesn")
-    inp_line_1 = tk.Entry(win).grid(row=1, column=1, stick="wesn")
-    inp_line_2 = tk.Entry(win).grid(row=2, column=1, stick="wesn")
-    inp_line_3 = tk.Entry(win).grid(row=3, column=1, stick="wesn")
-    inp_line_4 = tk.Entry(win).grid(row=4, column=1, stick="wesn")
+    inp_line_1 = tk.Entry(win)
+    inp_line_1.grid(row=1, column=1, stick="wesn")
+    inp_line_2 = tk.Entry(win)
+    inp_line_2.grid(row=2, column=1, stick="wesn")
+    inp_line_3 = tk.Entry(win)
+    inp_line_3.grid(row=3, column=1, stick="wesn")
+    inp_line_4 = tk.Entry(win)
+    inp_line_4.grid(row=4, column=1, stick="wesn")
     save = tk.Button(win, text="Save", command=add_to_phonebook).grid(row=5, column=1, stick="we")
     return [inp_line_1, inp_line_2, inp_line_3, inp_line_4]
     
 
 def add_to_phonebook():
-    first_name = add_entry()[0]
-    last_name = add_entry()[1]
-    phone_num = add_entry()[2]
-    comment = add_entry()[3]
+    first_name = add_entry()[0].get()
+    last_name = add_entry()[1].get()
+    phone_num = add_entry()[2].get()
+    comment = add_entry()[3].get()
     abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
+    view.print_dict(abonent)
     logic.add_contact(abonent)
 
 

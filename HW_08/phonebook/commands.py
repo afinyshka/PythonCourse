@@ -1,8 +1,8 @@
-from view_book import input_line
+# from view_book import input_line
+# import logic
 
-def get_entry():
-    value = input_line.get()
-    return value
+# def find_entry():
+#     value = input_line.get()
+#     logic.find_contact(value)
 
-a = get_entry()
-print(a)
+# print(input_line)

@@ -14,9 +14,15 @@ def print_dict(name_dict: str) -> None:
     for i in name_dict:
         print(f'    {i}: {name_dict[i]}')
 
+def print_dict1(name_dict: str) -> None:
+    cont_text = f'\n'
+    for i in name_dict:
+        cont_text += i + ": " + name_dict[i] + f"\n"
+    return cont_text
+
 def success_update():
-    print('The data has been successfully updated!')
+    return('The data has been successfully updated!')
 
 def success_saved():
-    print('The data has been successfully saved!')
+    return('The data has been successfully saved!')
 

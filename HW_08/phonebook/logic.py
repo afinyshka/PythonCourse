@@ -2,7 +2,6 @@ import json
 import os
 import view
 import csv
-import view_book
 
 
 FILE_NAME = 'contacts_book.json'
@@ -10,12 +9,12 @@ FILE_NAME_2 = 'contacts_book.csv'
 path_1 = 'HW_08' + os.sep + 'phonebook' + os.sep + 'data' + os.sep +f'{FILE_NAME}'
 path_2 = 'HW_08' + os.sep + 'phonebook' + os.sep + 'data' + os.sep + f'{FILE_NAME_2}'
 
-def add_contact ():
-    first_name = input('Enter the first name: ')
-    last_name = input('Enter the last name: ')
-    phone_num = input('Enter a phone number: ')
-    comment = input('Enter a comment: ')
-    abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
+def add_contact (abonent):
+    # first_name = input('Enter the first name: ')
+    # last_name = input('Enter the last name: ')
+    # phone_num = input('Enter a phone number: ')
+    # comment = input('Enter a comment: ')
+    # abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
     with open (path_1, "r") as file:
         if os.stat(path_1).st_size == 0:
             abonents = []
@@ -25,19 +24,21 @@ def add_contact ():
         json.dump(abonents, file)
     view.success_saved()
 
-def find_contact():
+def find_contact(value):
     with open(path_1, 'r') as file:
         abonents: list[dict] = json.load(file)
         dict_count = 0
-        find_ab = view_book.get_entry()
-        print('find_ab = ', find_ab)
-        # find_ab = input('Enter the name of the abonent to delite: ')
+        text_contacts = ''
+        print('find_ab = ', value)
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
-                return view.print_dict(dicts)
+            if value.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
+                text_contacts += view.print_dict1(dicts)
+                view.print_dict(dicts)
                 dict_count += 1
-        if dict_count == 0:
-            return print('There\'s no contact with this name. Try again')
+    if dict_count == 0:
+        return ('There\'s no contact with this name. Try again')
+    else:
+        return text_contacts
 
 def delite_contact():
     with open(path_1, 'r') as file:
@@ -112,3 +113,5 @@ def export_contacts_to_csv():
                 ]
             )
     view.success_saved()
+
+# find_contact('aks')

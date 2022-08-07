@@ -2,7 +2,9 @@ import tkinter as tk
 import logic
 import view
 
-# input_line = None
+def get_entry(entry_text):
+    value = entry_text.get()
+    return value
 
 def find_entry():
     value = input_line.get()
@@ -17,14 +19,22 @@ def add_entry():
     tk.Label(win, text='Enter last name:').grid(row=2, column=0, stick="wesn")
     tk.Label(win, text='Enter phone number:').grid(row=3, column=0, stick="wesn")
     tk.Label(win, text='Enter comment:').grid(row=4, column=0, stick="wesn")
-    first_name = tk.Entry(win).grid(row=1, column=1, stick="wesn")
-    last_name = tk.Entry(win).grid(row=2, column=1, stick="wesn")
-    phone_num = tk.Entry(win).grid(row=3, column=1, stick="wesn")
-    comment = tk.Entry(win).grid(row=4, column=1, stick="wesn")
+    inp_line_1 = tk.Entry(win).grid(row=1, column=1, stick="wesn")
+    inp_line_2 = tk.Entry(win).grid(row=2, column=1, stick="wesn")
+    inp_line_3 = tk.Entry(win).grid(row=3, column=1, stick="wesn")
+    inp_line_4 = tk.Entry(win).grid(row=4, column=1, stick="wesn")
+    save = tk.Button(win, text="Save", command=add_to_phonebook).grid(row=5, column=1, stick="we")
+    return [inp_line_1, inp_line_2, inp_line_3, inp_line_4]
+    
+
+def add_to_phonebook():
+    first_name = add_entry()[0]
+    last_name = add_entry()[1]
+    phone_num = add_entry()[2]
+    comment = add_entry()[3]
     abonent = {'first_name': first_name, 'last_name': last_name, 'phone_number': phone_num, 'comment' : comment}
     logic.add_contact(abonent)
-    view.success_saved()
-    return abonent
+
 
 
 
@@ -32,7 +42,7 @@ if __name__ == '__main__':
     win = tk.Tk()
     # photo = tk.PhotoImage(file = 'name')
     # win.iconphoto(False, photo)
-    win.title("Calculator")
+    win.title("Phone book")
     win.geometry(f"500x300+600+100")
     win.resizable(False, True)
     print('Its open')
@@ -52,8 +62,5 @@ if __name__ == '__main__':
     win.grid_columnconfigure(2, minsize=120)
     # win.grid_rowconfigure(0, minsize=30)
     # win.grid_rowconfigure(1, minsize=30)
-
-
-
 
     win.mainloop()

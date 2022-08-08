@@ -30,7 +30,6 @@ def find_contact(value):
         abonents: list[dict] = json.load(file)
         dict_count = 0
         text_contacts = ''
-        # print('find_ab = ', value)
         for dicts in abonents:
             if value.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
                 text_contacts += view.print_dict1(dicts)
@@ -40,23 +39,6 @@ def find_contact(value):
         return ('There\'s no contact with this name. Try again')
     else:
         return text_contacts
-
-# def open_data():
-#     with open(path_1, 'r') as file:
-#         abonents: list[dict] = json.load(file)
-#         return abonents
-
-# def contact_search (value):
-#     abonents = open_data()
-#     dict_count = 0
-#     for dicts in abonents:
-#         if value.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
-#             dict_count += 1
-#             text_contacts = f'{dicts["first_name"]} {dicts["last_name"]}'
-#         if dict_count == 0:
-#             return ('There\'s no contact with this name. Try again')
-#         else:
-#             return text_contacts
 
 def delete_contact(value_1, value_2):
     with open(path_1, 'r') as file:
@@ -71,36 +53,20 @@ def delete_contact(value_1, value_2):
                 view.success_update()
 
 
-def change_contact():
+def change_contact(abonent: dict):
     with open(path_1, 'r') as file:
         abonents: list[dict] = json.load(file)
-        dict_count = 0
-        find_ab = input("Enter the name of the abonent to change it's data: ")
+        print(abonent)
         for dicts in abonents:
-            if find_ab.lower() in dicts['first_name'].lower() + ' ' + dicts['last_name'].lower() + ' ' + dicts['comment'].lower():
-                dict_count += 1
-                print(f'Are you sure you want to change data for contact: {dicts["first_name"]} {dicts["last_name"]}?')
-                change_confirmation = input('for yes - press 1\nfor no - press 2:\n')
-                if change_confirmation == '1':
-                    change_data = input(f'To change the data enter the number\n1 - first_name\n2 - last_name\n3 - phone_number\n4 - comment\n:')
-                    match change_data:
-                        case '1': 
-                            new_name = input('Enter a new first_name: ')
-                            dicts["first_name"] = new_name
-                        case '2': 
-                            new_name = input('Enter a new last_name: ')
-                            dicts["last_name"] = new_name
-                        case '3': 
-                            new_name = input('Enter a new phone_number: ')
-                            dicts["phone_number"] = new_name
-                        case '4': 
-                            new_name = input('Enter a new comment: ')
-                            dicts["comment"] = new_name
-                    with open(path_1, "w") as file:
-                        json.dump(abonents, file)
-                    view.success_update()    
-        if dict_count == 0:
-            print('There\'s no contact with this name. Try again')
+            for key in dicts[key]:
+                if dicts[key] in abonent.values():
+                    print(dicts)
+                    dicts = abonent
+                    print(dicts)
+        with open(path_1, "w") as file:
+            json.dump(abonents, file)
+        view.success_update()    
+
 
 def export_contacts_to_csv():
     with open (path_1, 'r') as file:

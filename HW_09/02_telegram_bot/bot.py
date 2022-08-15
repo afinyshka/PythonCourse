@@ -9,6 +9,7 @@ from aiogram.dispatcher import FSMContext
 
 from config import TOKEN
 from xo_game import matrix_text, win_combination_check, winning_positions, get_move
+from utils import convert_user_data_to_plain_list
 
 bot = Bot(token=TOKEN)
 # dp = Dispatcher(bot)
@@ -24,8 +25,15 @@ class MoveState(StatesGroup):
     waiting_for_move_x = State()
     waiting_for_move_o = State()
 
-def get_keyboard():
-    buttons = available_moves
+def get_keyboard(user_data: dict[str, list] = None):
+    buttons = ['1','2','3','4','5','6','7','8','9']
+    if user_data:
+        if user_data.get('move_x'):
+            for i in user_data['move_x']:
+                buttons[i-1] = 'X'
+        if user_data.get('move_o'):
+            for i in user_data['move_o']:
+                buttons[i-1] = 'O'
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*buttons)
     return keyboard
@@ -36,17 +44,35 @@ async def star_game(message: types.Message):
     keyboard = get_keyboard()
     await message.answer('Choose the cell for "X":  ', reply_markup=keyboard)
     await MoveState.waiting_for_move_x.set()
-    
+
+
 @dp.message_handler(state=MoveState.waiting_for_move_x)
 async def user_move_x(message: types.Message, state: FSMContext):
     if message.text.lower() not in available_moves:
         await message.answer("Please use the bellow keyboard.")
         return
-    await state.update_data(move_x=message.text)
     user_data = await state.get_data()
+    move_x: list = user_data.get('move_x') or []
+    move_o: list = user_data.get('move_o') or []
+    if int(message.text.lower()) in move_x + move_o:
+        await message.answer("Данное поле уже занято, попробуй другое")
+        return
+    move_x.append(int(message.text))
+    await state.update_data(move_x=move_x)
+    user_data = await state.get_data()
+
     print("massage text: ",message.text)
-    keyboard = get_keyboard()
-    await MoveState.next()
+    game_result = winning_positions(convert_user_data_to_plain_list(user_data))
+    if game_result in ['X', 'O']:
+        await message.answer('Игра закончена', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'draw':
+        await message.answer('Игра закончена в ничью', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    keyboard = get_keyboard(user_data)
+    await MoveState.waiting_for_move_o.set()
     await message.answer('Choose the cell for "O":  ', reply_markup=keyboard)
 
 @dp.message_handler(state=MoveState.waiting_for_move_o)   
@@ -54,18 +80,37 @@ async def user_move_o(message: types.Message, state: FSMContext):
     if message.text.lower() not in available_moves:
         await message.answer("Please use the bellow keyboard.")
         return
-    await state.update_data(move_o=message.text)
+    user_data = await state.get_data()
+    move_x: list = user_data.get('move_x') or []
+    move_o: list = user_data.get('move_o') or []
+    if int(message.text.lower()) in move_x + move_o:
+        await message.answer("Данное поле уже занято, попробуй другое")
+        return
+    move_o.append(int(message.text))
+    await state.update_data(move_o=move_o)
     user_data = await state.get_data()
     print("massage text: ",message.text)
     print(user_data, type(user_data))
-    game_X_O(user_data)
-    await message.answer(f"Your first move is {user_data['move_x']}, second is {user_data['move_o']} = {message.text.lower()}", reply_markup=types.ReplyKeyboardRemove())
-    await state.finish()
+
+    game_result = winning_positions(convert_user_data_to_plain_list(user_data))
+    if game_result in ['X', 'O']:
+        await message.answer('Игра закончена', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'draw':
+        await message.answer('Игра закончена в ничью', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    keyboard = get_keyboard(user_data)
+    await MoveState.waiting_for_move_x.set()
+    await message.answer('Choose the cell for "X":  ', reply_markup=keyboard)
+
 
 @dp.message_handler(commands="cancel", state="*")
 async def cmd_cancel(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer("Действие отменено", reply_markup=types.ReplyKeyboardRemove())
+
 
 def game_X_O (user_data: dict, rows: int = 3, columns: int = 3):
     print("You started the xo game")
@@ -89,7 +134,6 @@ def game_X_O (user_data: dict, rows: int = 3, columns: int = 3):
         if count == 9:
             print ('You ended the game in a draw!')
     print('The end!')
-    return matrix_text(list_x_o)
 
 # Создаем message_handler и объявляем там функцию ответа:
 @dp.message_handler(commands=['start'])

@@ -36,7 +36,10 @@ def winning_positions (list: list):
         return 'X'
     elif (a == b == c == 'O' or d == e == f == 'O' or g == h == i == 'O' or a == d == g  == 'O' or b == e == h == 'O' or c == f == i == 'O'  or a == e == i == 'O' or c == e == g == 'O'):
         return 'O'
-    else: return "draw"
+    if all(list):
+        return 'draw'
+    else:
+        return "game not over"
 
 def start_game(message: types.Message, state: FSMContext):
     list_x_o = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]

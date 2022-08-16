@@ -8,7 +8,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 
 from config import TOKEN
-from xo_game import matrix_text, win_combination_check, winning_positions, get_move
+from xo_game import matrix_text, winning_positions
 from utils import convert_user_data_to_plain_list
 
 bot = Bot(token=TOKEN)
@@ -55,20 +55,24 @@ async def user_move_x(message: types.Message, state: FSMContext):
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     if int(message.text.lower()) in move_x + move_o:
-        await message.answer("Данное поле уже занято, попробуй другое")
+        await message.answer("Ooops, occupied. Try another cell:")
         return
     move_x.append(int(message.text))
     await state.update_data(move_x=move_x)
     user_data = await state.get_data()
 
-    print("massage text: ",message.text)
+    print("message text: ", message.text)
     game_result = winning_positions(convert_user_data_to_plain_list(user_data))
-    if game_result in ['X', 'O']:
-        await message.answer('Игра закончена', reply_markup=types.ReplyKeyboardRemove())
+    if game_result == 'X':
+        await message.answer('X-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'O':
+        await message.answer('O-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'draw':
-        await message.answer('Игра закончена в ничью', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('You ended the game in a draw!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     keyboard = get_keyboard(user_data)
@@ -84,21 +88,25 @@ async def user_move_o(message: types.Message, state: FSMContext):
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     if int(message.text.lower()) in move_x + move_o:
-        await message.answer("Данное поле уже занято, попробуй другое")
+        await message.answer("Ooops, occupied. Try another cell:")
         return
     move_o.append(int(message.text))
     await state.update_data(move_o=move_o)
     user_data = await state.get_data()
-    print("massage text: ",message.text)
+    print("message text: ",message.text)
     print(user_data, type(user_data))
 
     game_result = winning_positions(convert_user_data_to_plain_list(user_data))
-    if game_result in ['X', 'O']:
-        await message.answer('Игра закончена', reply_markup=types.ReplyKeyboardRemove())
+    if game_result == 'X':
+        await message.answer('X-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'O':
+        await message.answer('O-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'draw':
-        await message.answer('Игра закончена в ничью', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('You ended the game in a draw!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     keyboard = get_keyboard(user_data)
@@ -112,37 +120,14 @@ async def cmd_cancel(message: types.Message, state: FSMContext):
     await message.answer("Действие отменено", reply_markup=types.ReplyKeyboardRemove())
 
 
-def game_X_O (user_data: dict, rows: int = 3, columns: int = 3):
-    print("You started the xo game")
-    list_x_o = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
-    move_storage = []
-    count = 0 # Number of players moves
-    print(matrix_text(list_x_o))
-    while count < (rows * columns):
-        if count%2==0:
-            move = int(user_data['move_x']) # если вернуть функцию то выполнится проверка и дальше функция не пойдет
-            print("move", move)
-        else:
-            move = int(user_data['move_o']) # если вернуть функцию то выполнится проверка и дальше функция не пойдет
-            print("move", move)
-        move_storage.append(move+1)
-        print(move_storage)
-        print(matrix_text(list_x_o))
-        count += 1
-        if count > (rows + columns - 2) and (win_combination_check(list_x_o) == 'win'):
-            break
-        if count == 9:
-            print ('You ended the game in a draw!')
-    print('The end!')
-
 # Создаем message_handler и объявляем там функцию ответа:
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.reply(f"Hello, {message.from_user.first_name}!\nSend me a text message!") # ответ на конкретноое сооьщение
+    await message.reply(f"Hello, {message.from_user.first_name}!\nSend me a text message /help for help!") # ответ на конкретноое сооьщение
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
-    await message.reply("Напиши мне что-нибудь, и я отпрпавлю этот текст тебе в ответ!")
+    await message.reply("/time - show current time\n/game - to start tic tac toe game\n/cancel - to cancel")
 
 @dp.message_handler(commands=['time'])
 async def process_time_command(message: types.Message):
@@ -151,10 +136,10 @@ async def process_time_command(message: types.Message):
     # time.strftime('%H:%M:%S')
     await message.reply(time.strftime('%H:%M:%S')) # "%H:%M"
 
-@dp.message_handler(commands=['matrix'])
-async def process_matrix_command(message: types.Message):
-    list_x_o = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
-    await message.answer(matrix_text(list_x_o)) # просто сообщение от бота
+# @dp.message_handler(commands=['matrix'])
+# async def process_matrix_command(message: types.Message):
+#     list_x_o = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+#     await message.answer(matrix_text(list_x_o)) # просто сообщение от бота
 
 # @dp.message_handler()
 # async def echo_message(msg: types.Message):

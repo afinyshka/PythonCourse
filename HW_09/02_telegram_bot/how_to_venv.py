@@ -2,3 +2,4 @@
 # source .venv/bin/activate - переключение на виртуальное окружение
 # pip install -r requirements.txt - создание текстового файла с бибилиотеками
 # git stash - откатить к последнему коммиту
+# python3 -m pip list - список библиотек

@@ -69,10 +69,13 @@ async def user_turns(message: types.Message, state: FSMContext):
         await MoveBotState.waiting_for_player_move.set()
     if message.text == "O": # первый ход бота
         user_data = {}
-        user_data['move_x'] = [randint(1,9)]
+        bot_move = randint(1,9)
+        move_x: list = user_data.get('move_x') or []
+        move_x.append(int(bot_move))
+        await state.update_data(move_x=move_x)
+        user_data = await state.get_data()
         print(user_data, type(user_data))
         await message.answer("Вы играете за O. Ваш ход: ", reply_markup=get_keyboard(user_data))
-        # await message.answer("Вы играете за O.")
         await MoveBotState.waiting_for_bot_move.set()
         return user_data
         # {'move_x': [2, 4, 8], 'move_o': [5, 7, 3]} <class 'dict'>
@@ -122,25 +125,11 @@ async def user_move(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=MoveBotState.waiting_for_bot_move)
 async def bot_moves(message: types.Message, state: FSMContext):
-    # await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
-    # user_data = {}
-    # bot_move = randint(1,9)
-    # while bot_move in move_x + move_o:
-    #     bot_move = randint(1,9)
-    # print(user_data, type(user_data))
-    # move_x: list = user_data.get('move_x') or []
-    # move_o: list = user_data.get('move_o') or []
-    # move_x.append(int(bot_move))
-    # await state.update_data(move_x=move_x)
-    # user_data = await state.get_data()
-    
     if message.text not in available_moves:
         await message.answer("Пожалуйста используйте клавиатуру снизу.")
         return
-    user_data = await user_move(MoveBotState.waiting_for_turn)
-    
     user_data = await state.get_data()
-    print("eser_data1 ",user_data)
+    print("user_data1 ",user_data)
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     print(move_x, type(move_x), move_o, type(move_o))
@@ -177,10 +166,6 @@ async def bot_moves(message: types.Message, state: FSMContext):
         await message.answer('You ended the game in a draw!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
-    # keyboard = get_keyboard(user_data)
-    # await MoveState.waiting_for_move_o.set()
-    # await message.answer('Choose the cell for "O":  ', reply_markup=keyboard)
-
 
 @dp.message_handler(commands=['game'])
 async def star_game(message: types.Message):

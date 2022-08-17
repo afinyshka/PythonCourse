@@ -88,38 +88,40 @@ async def user_move(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
-    print(move_x, type(move_x), move_o, type(move_o))
     if int(message.text) in move_x + move_o:
         await message.answer("Ой, тут уже занято, выбери другую клеточку:")
         return
-    # if user_data[move_o] == None:
     move_x.append(int(message.text))
     await state.update_data(move_x=move_x)
     user_data = await state.get_data()
- 
-    bot_move = randint(1,9)
-    while bot_move in move_x + move_o:
-        bot_move = randint(1,9)
-    print(user_data, type(user_data))
-    move_x: list = user_data.get('move_x') or []
-    move_o: list = user_data.get('move_o') or []
-    move_o.append(int(bot_move))
-    await state.update_data(move_o=move_o)
-    user_data = await state.get_data()
+    print(move_x, type(move_x), move_o, type(move_o))
+    print(len(user_data['move_x']))
+
+    # await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
+    if len(user_data['move_x']) < 5:
+        bot_move = randint(1, 9)
+        move_x: list = user_data.get('move_x') or []
+        move_o: list = user_data.get('move_o') or []
+        while bot_move in move_x + move_o:
+            bot_move = randint(1, 9)
+        print(user_data, type(user_data))
+        move_o.append(int(bot_move))
+        await state.update_data(move_o=move_o)
+        user_data = await state.get_data()
 
     await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
 
     game_result = winning_positions(convert_user_data_to_plain_list(user_data))
     if game_result == 'X':
-        await message.answer('X-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Вы выиграли!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'O':
-        await message.answer('O-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Вы проиграли.', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'draw':
-        await message.answer('You ended the game in a draw!', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Ничья!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
 
@@ -129,7 +131,7 @@ async def bot_moves(message: types.Message, state: FSMContext):
         await message.answer("Пожалуйста используйте клавиатуру снизу.")
         return
     user_data = await state.get_data()
-    print("user_data1 ",user_data)
+    print("user_data1 ", user_data)
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     print(move_x, type(move_x), move_o, type(move_o))
@@ -141,12 +143,12 @@ async def bot_moves(message: types.Message, state: FSMContext):
     await state.update_data(move_o=move_o)
     user_data = await state.get_data()
 
-    bot_move = randint(1,9)
-    while bot_move in move_x + move_o:
-        bot_move = randint(1,9)
-    print(user_data, type(user_data))
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
+    bot_move = randint(1, 9)
+    while bot_move in move_x + move_o:
+        bot_move = randint(1, 9)
+    print(user_data, type(user_data))
     move_x.append(int(bot_move))
     await state.update_data(move_x=move_x)
     user_data = await state.get_data()
@@ -155,15 +157,15 @@ async def bot_moves(message: types.Message, state: FSMContext):
 
     game_result = winning_positions(convert_user_data_to_plain_list(user_data))
     if game_result == 'X':
-        await message.answer('X-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Вы проиграли.', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'O':
-        await message.answer('O-s win! Game over.', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Вы выиграли!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
     if game_result == 'draw':
-        await message.answer('You ended the game in a draw!', reply_markup=types.ReplyKeyboardRemove())
+        await message.answer('Ничья!', reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         return
 

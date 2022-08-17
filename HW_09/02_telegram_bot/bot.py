@@ -74,6 +74,7 @@ async def user_turns(message: types.Message, state: FSMContext):
         await message.answer("Вы играете за O. Ваш ход: ", reply_markup=get_keyboard(user_data))
         # await message.answer("Вы играете за O.")
         await MoveBotState.waiting_for_bot_move.set()
+        return user_data
         # {'move_x': [2, 4, 8], 'move_o': [5, 7, 3]} <class 'dict'>
 
 @dp.message_handler(state=MoveBotState.waiting_for_player_move)
@@ -136,7 +137,10 @@ async def bot_moves(message: types.Message, state: FSMContext):
     if message.text not in available_moves:
         await message.answer("Пожалуйста используйте клавиатуру снизу.")
         return
+    user_data = await user_move(MoveBotState.waiting_for_turn)
+    
     user_data = await state.get_data()
+    print("eser_data1 ",user_data)
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     print(move_x, type(move_x), move_o, type(move_o))

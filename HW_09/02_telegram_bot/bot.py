@@ -1,11 +1,12 @@
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-from datetime import datetime
-
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
+from datetime import datetime
+from os import getenv
+from sys import exit
 
 from random import randint
 
@@ -13,7 +14,13 @@ from config import TOKEN
 from xo_game import winning_positions
 from utils import convert_user_data_to_plain_list
 
-bot = Bot(token=TOKEN)
+bot_token = getenv("BOT_TOKEN")
+if not bot_token:
+    exit("Error: no token provided")
+
+bot = Bot(token=bot_token)
+
+# bot = Bot(token=TOKEN)
 # dp = Dispatcher(bot)
 
 storage = MemoryStorage()

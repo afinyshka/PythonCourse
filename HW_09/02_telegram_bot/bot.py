@@ -10,7 +10,7 @@ from aiogram.dispatcher import FSMContext
 from random import randint
 
 from config import TOKEN
-from xo_game import matrix_text, winning_positions, bot_move
+from xo_game import winning_positions
 from utils import convert_user_data_to_plain_list
 
 bot = Bot(token=TOKEN)
@@ -97,6 +97,20 @@ async def user_move(message: types.Message, state: FSMContext):
     print(move_x, type(move_x), move_o, type(move_o))
     print(len(user_data['move_x']))
 
+    game_result = winning_positions(convert_user_data_to_plain_list(user_data))
+    if game_result == 'X':
+        await message.answer('Вы выиграли!', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'O':
+        await message.answer('Вы проиграли.', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'draw':
+        await message.answer('Ничья!', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+
     # await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
     if len(user_data['move_x']) < 5:
         bot_move = randint(1, 9)
@@ -108,8 +122,6 @@ async def user_move(message: types.Message, state: FSMContext):
         move_o.append(int(bot_move))
         await state.update_data(move_o=move_o)
         user_data = await state.get_data()
-
-    await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
 
     game_result = winning_positions(convert_user_data_to_plain_list(user_data))
     if game_result == 'X':
@@ -125,6 +137,8 @@ async def user_move(message: types.Message, state: FSMContext):
         await state.finish()
         return
 
+    await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
+
 @dp.message_handler(state=MoveBotState.waiting_for_bot_move)
 async def bot_moves(message: types.Message, state: FSMContext):
     if message.text not in available_moves:
@@ -134,24 +148,37 @@ async def bot_moves(message: types.Message, state: FSMContext):
     print("user_data1 ", user_data)
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
-    print(move_x, type(move_x), move_o, type(move_o))
     if int(message.text) in move_x + move_o:
         await message.answer("Ой, тут уже занято, выбери другую клеточку:")
         return
-    # if user_data[move_o] == None:
     move_o.append(int(message.text))
     await state.update_data(move_o=move_o)
     user_data = await state.get_data()
+    print(user_data, type(user_data))
+
+    game_result = winning_positions(convert_user_data_to_plain_list(user_data))
+    if game_result == 'X':
+        await message.answer('Вы проиграли!', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'O':
+        await message.answer('Вы выиграли.', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
+    if game_result == 'draw':
+        await message.answer('Ничья!', reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
 
     move_x: list = user_data.get('move_x') or []
     move_o: list = user_data.get('move_o') or []
     bot_move = randint(1, 9)
     while bot_move in move_x + move_o:
         bot_move = randint(1, 9)
-    print(user_data, type(user_data))
     move_x.append(int(bot_move))
     await state.update_data(move_x=move_x)
     user_data = await state.get_data()
+    print(user_data, type(user_data))
 
     await message.answer("Ваш ход: ", reply_markup=get_keyboard(user_data))
 
@@ -255,11 +282,11 @@ async def cmd_cancel(message: types.Message, state: FSMContext):
 # Создаем message_handler и объявляем там функцию ответа:
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.reply(f"Hello, {message.from_user.first_name}!\nSend me a text message /help for help!") # ответ на конкретноое сооьщение
+    await message.reply(f"Привет, {message.from_user.first_name}!\nСмотри, что я уже умею:\n/time - показать текущее время\n/game - игра в крестики нолики для двух игроков\n/gamebot - игра в крестики нолики с ботом\n/cancel - отмена\n/help - подсказки") # ответ на конкретноое сооьщение
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
-    await message.reply("/time - show current time\n/game - to start tic tac toe game\n/cancel - to cancel")
+    await message.reply("/cancel - отменяет игру в любое время\n/start - для возврата в главное меню")
 
 @dp.message_handler(commands=['time'])
 async def process_time_command(message: types.Message):

@@ -1,3 +1,5 @@
+from random import randint
+
 def matrix_text(list: list) -> str:
     str_text = list[0] + '  ' + list[1] + '  ' + list[2] + '\n' + list[3] + '  ' + \
         list[4] + '  ' + list[5] + '\n' + list[6] + \
@@ -24,3 +26,12 @@ def winning_positions(list: list):
         return 'draw'
     else:
         return "game not over"
+
+def bot_move ():
+    move = str(randint(1,9))
+    return move
+
+# def get_move(move_storage, list_x_o):
+#     while [int(move) for i in move_storage if move_storage.count(int(move)) > 0] or not move in ['1','2','3','4','5','6','7','8','9']:
+#         move = int(move) - 1
+#     return move

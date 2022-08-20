@@ -10,7 +10,7 @@ from sys import exit
 
 from random import randint
 
-from config import TOKEN
+from keyboards import get_keyboard, whos_turn_keyboard
 from xo_game import winning_positions
 from utils import convert_user_data_to_plain_list
 
@@ -38,25 +38,6 @@ class MoveBotState(StatesGroup):
     waiting_for_turn = State()
     waiting_for_player_move = State()
     waiting_for_bot_move = State()
-
-def whos_turn_keyboard():
-    buttons = ['X','O']
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(*buttons)
-    return keyboard
-
-def get_keyboard(user_data: dict[str, list] = None):
-    buttons = ['1','2','3','4','5','6','7','8','9']
-    if user_data:
-        if user_data.get('move_x'):
-            for i in user_data['move_x']:
-                buttons[i-1] = 'X'
-        if user_data.get('move_o'):
-            for i in user_data['move_o']:
-                buttons[i-1] = 'O'
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(*buttons)
-    return keyboard
 
 @dp.message_handler(commands=['gamebot'])
 async def star_gamebot(message: types.Message):

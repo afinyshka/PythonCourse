@@ -5,9 +5,10 @@ import csv
 
 FILE_NAME = 'contacts_book.json'
 FILE_NAME_2 = 'contacts_book.csv'
-path_1 = 'HW_10' + os.sep + 'phonebook' + os.sep + 'data' + os.sep + f'{FILE_NAME}'
-# path_1 = '/Users/user/Desktop/GB/Python_Course/HW_10/phonebook/data/contacts_book.json'
-path_2 = 'HW_10' + os.sep + 'phonebook' + os.sep + 'data' + os.sep + f'{FILE_NAME_2}'
+# path_1 = 'HW_10' + os.sep + 'phonebook' + os.sep + 'data' + os.sep + f'{FILE_NAME}'
+path_1 = '/Users/user/Desktop/GB/Python_Course/HW_10/phonebook/data/contacts_book.json'
+# path_2 = 'HW_10' + os.sep + 'phonebook' + os.sep + 'data' + os.sep + f'{FILE_NAME_2}'
+path_2 = '/Users/user/Desktop/GB/Python_Course/HW_10/phonebook/data/contacts_book.csv'
 
 
 cwd = os.getcwd()  # Get the current working directory (cwd)

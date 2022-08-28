@@ -1,10 +1,31 @@
-def convert_user_data_to_plain_list(user_data: dict[str, list]) -> list:
-    """Конвертирует user_data в формат для функции winning_positions."""
-    lst = [None, None, None, None, None, None, None, None, None]
-    if not user_data.get('move_x') or not user_data.get('move_o'):
-        return lst
-    for i in user_data['move_x']:
-        lst[i-1] = 'X'
-    for i in user_data['move_o']:
-        lst[i-1] = 'O'
-    return lst
+import pafy
+
+def get_title(url):
+    yVideo = pafy.new(url)
+    title = yVideo.title
+    return title
+
+def get_author(url):
+    yVideo = pafy.new(url)
+    author = yVideo.author
+    return author
+
+def get_url(call):
+    url = call.split('|')
+    video_url = url[1]
+    return video_url
+
+def get_download_url_with_audio(url_video):
+    yVideo = pafy.new(url_video)
+    video = yVideo.getbest()
+    return video.url_https
+
+def get_download_url_best_video(url_video):
+    yVideo = pafy.new(url_video)
+    video = yVideo.getbestvideo()
+    return video.url_https
+
+def get_download_url_best_audio(url_video):
+    yVideo = pafy.new(url_video)
+    video = yVideo.getbestaudio()
+    return video.url_https

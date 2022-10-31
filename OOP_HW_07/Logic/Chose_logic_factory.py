@@ -1,13 +1,15 @@
-import Calc_logic as cl
+from OOP_HW_07.Logic.Calc_logic import CalcLogic, MultLogic, DivLogic, SumLogic, DiffLogic
 
-class ChoseModelFactory ():
 
-    def choose_model(sign: str, operandList: list) -> cl.Calc_logic:
-        my_action = cl.Calc_logic()
-        match (sign):
-            case "*": my_action = cl.Mult_Logic
-            case "/": my_action = cl.Div_Logic
-            case "+": my_action = cl.Sum_Logic
-            case "-": my_action = cl.Diff_Logic
-        my_action.setX(operandList[0])
-        my_action.setY(operandList[1])
+class ChoseModelFactory:
+
+    def choose_model(self, sign: str, operandList: list):
+        my_action = CalcLogic()
+        match sign:
+            case "*": my_action = MultLogic()
+            case "/": my_action = DivLogic()
+            case "+": my_action = SumLogic()
+            case "-": my_action = DiffLogic()
+        my_action.set_x(operandList[0])
+        my_action.set_y(operandList[1])
+        return my_action

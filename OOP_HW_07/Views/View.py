@@ -1,6 +1,13 @@
+from fractions import Fraction
 class View:
     def get_value(self, string_name: str) -> float:
-        return float(input(f'{string_name}: '))
+        value = input(f'{string_name}: ')
+        try:
+            value = Fraction(value)
+            return value
+        except ValueError:
+            value = complex(value)
+            return value
 
     def get_sign(self, string_name: str) -> str:
         return input(f'{string_name}: ')

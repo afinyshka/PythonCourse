@@ -1,6 +1,8 @@
 from OOP_HW_07.Logic.Calc_logic import CalcLogic
 from OOP_HW_07.Logic.Chose_logic_factory import ChoseModelFactory
 from OOP_HW_07.Views.View import View
+from OOP_HW_07.Loggers import Logger
+
 
 
 class Presenter:
@@ -19,3 +21,5 @@ class Presenter:
         c = self.calc.choose_model(sign, my_list).result()
         strr = f"{a} {sign} {b} = {c}"
         View.show_result(strr)
+        Logger.get_log(c, f"{a} {sign} {b}")
+
